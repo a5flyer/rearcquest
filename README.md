@@ -58,10 +58,6 @@
 
 ### Next Steps (if continuing)
 
-- Add TLS/HTTPS with self-signed certificates
-- Add cert-manager for certificate management
-- Document limitations in submission
-- Take screenshots of current deployment
 - Consider EC2-based alternative for full quest completion
 
 The deployment demonstrates modern cloud best practices with containerization, Kubernetes orchestration, infrastructure automation, and load balancing - even though the specific app's AWS detection isn't compatible with container environments.
