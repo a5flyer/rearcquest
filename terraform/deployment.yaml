@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reactf
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: reactf
+  template:
+    metadata:
+      labels:
+        app: reactf
+    spec:
+      containers:
+        - name: reactf
+          image: 188358598401.dkr.ecr.us-east-1.amazonaws.com/reactf:latest
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: reactf-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: reactf
+  ports:
+    - port: 80
+      targetPort: 3000
