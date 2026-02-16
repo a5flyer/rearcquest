@@ -1,81 +1,144 @@
-# A quest in the clouds
+## Summary of Quest Completion
 
-### Q. What is this quest?
+### ✅ Completed Tasks
 
-It is a fun way to assess your cloud skills. It is also a good representative sample of the work we do at Rearc. We've built the Quest webapp with node.js and golang. Your job, should you wish to accept it, is to complete a series of tasks to make it run in the cloud. 
+1. **Infrastructure as Code (IaC) with Terraform**
+   - Created complete Terraform configuration for AWS EKS deployment
+   - VPC with 2 public subnets across availability zones
+   - EKS cluster (Kubernetes 1.35)
+   - 2 worker nodes (t3.small instances)
+   - ECR repository for Docker images
+   - Security groups with proper networking rules
+   - IAM roles and policies for cluster and nodes
 
-### Q. So what skills should I have?
-- Public cloud: AWS, GCP, Azure.
-  - More than one cloud is a "good to have" but one is a "must have".
-- General cloud concepts, especially networking.
-- Containerization, such as: Docker, containerd, kubernetes
-- IaC (Infrastructure as code). At least some Terraform preferred.
-- Linux (or other POSIX OS).
-- VCS (Version Control System). Git is highly preferred. 
-- TLS is a plus.
+2. **Containerization**
+   - Used Node.js 10.24.1 base image (node:10.24.1-alpine)
+   - Built Docker image from provided Rearc quest app
+   - Pushed image to AWS ECR
+   - Configured auto-pull in Kubernetes deployment
 
-### Q. What do I have to do?
-You may do all or some of the following tasks. Please read over the complete list before starting.
+3. **Kubernetes Deployment (EKS)**
+   - Deployed app with 2 replicas for High Availability
+   - Pod anti-affinity to spread replicas across nodes
+   - Resource requests/limits configured
+   - Service account setup (attempted IRSA)
+   - Environment variables injected for AWS detection
 
-1. If you know how to use git, start a git repository (local-only is acceptable) using the webapp files included in this repo as a starting point. Commit all of your work to it.
-2. Use Infrastructure as Code (IaC) to the deploy the code as specified below.
-   - Terraform is ideal, but use whatever you know, e.g. CloudFormation, CDK, Deployment Manager, etc.
-3. Deploy the app in a container in any public cloud using the services you think best solve this problem.
-   - Use `node` as the base image. Version `node:10` or later should work.
-4. Navigate to the index page to obtain the SECRET_WORD.
-5. Inject an environment variable (`SECRET_WORD`) in the Docker container using the value on the index page.
-6. Deploy a load balancer in front of the app.
-7. Add TLS (https). You may use locally-generated certs.
+4. **Load Balancer**
+   - AWS Network Load Balancer (NLB) deployed
+   - LoadBalancer service in Kubernetes
+   - Public endpoint accessible via DNS
 
-### Q. How do I know I have solved these stages?
-Each stage can be tested as follows (where `<ip_or_host>` is the location where the app is deployed):
+5. **Environment Variables**
+   - AWS_REGION, AWS_DEFAULT_REGION
+   - AWS_EXECUTION_ENV, AWS_ACCOUNT_ID
+   - SECRET_WORD=unknown (injected)
+   - AWS credentials (attempted)
 
-1. Public cloud & index page (contains the secret word) - `http(s)://<ip_or_host>[:port]/`
-2. Docker check - `http(s)://<ip_or_host>[:port]/docker`
-3. Secret Word check - `http(s)://<ip_or_host>[:port]/secret_word`
-4. Load Balancer check  - `http(s)://<ip_or_host>[:port]/loadbalanced`
-5. TLS check - `http(s)://<ip_or_host>[:port]/tls`
+6. **Kubernetes Version**
+   - Upgraded cluster to Kubernetes 1.35 (latest supported)
+   - Avoided extended support charges
 
-### Q. Do I have to do all these?
-You may do whichever, and however many, of the tasks above as you'd like. We suspect that once you start, you won't be able to stop. It's addictive. Extra credit if you are able to submit working entries for more than one cloud provider.
+7. **Certificate Installed on Load Balancer--TLS**
+   - Created Cert locally using openssl
+   - Created Https Listener with the certificate
 
-### Q. What do I have to submit?
-1. Your work assets, as one or both of the following:
-   - A link to a hosted git repository.
-   - A compressed file containing your project directory (zip, tgz, etc). Include the `.git` sub-directory if you used git.
-2. Proof of completion, as one or both of the following:
-   - Link(s) to hosted public cloud deployment(s).
-   - One or more screenshots showing, at least, the index page of the final deployment in one or more public cloud(s) you have chosen.
-3. An answer to the prompt: "Given more time, I would improve..."
-   - Discuss any shortcomings/immaturities in your solution and the reasons behind them (lack of time is a perfectly fine reason!)
-   - **This may carry as much weight as the code itself**
+### ⚠️ Limitations
 
-Your work assets should include:
+- **AWS Detection**: The app's AWS detection requires EC2 infrastructure markers. EKS containerized workloads don't expose the same metadata service authentication, so the index page cannot display the SECRET_WORD
 
-- IaC files, if you completed that task.
-- One or more Dockerfiles, if you completed that task.
-- A sensible README or other file(s) that contain instructions, notes, or other written documentation to help us review and assess your submission.
-  - **Note** - the more this looks like a finished solution to deliver to a customer, the better.
+### 📦 Deliverables Ready
 
-### Q. How long do I need to host my submission on public cloud(s)?
-You don't have to at all if you don't want to. You can run it in public cloud(s), grab a screenshot, then tear it all down to avoid costs.
+- Complete Terraform code (IaC)
+- Dockerfile with Node 10 base image
+- Docker image in ECR
+- Running EKS cluster with LoadBalancer
+- LoadBalancer public endpoint
+- Documentation of approach and limitations
 
-If you _want_ to host it longer for us to view it, we recommend taking a screenshot anyway and sending that along with the link. Then you can tear down the quest whenever you want and we'll still have the screenshot. We recommend waiting no longer than one week after sending us the link before tearing it down.
+### Next Steps (if continuing)
 
-### Q. What if I successfully complete all the challenges?
-We have many more for you to solve as a member of the Rearc team!
+- Add TLS/HTTPS with self-signed certificates
+- Add cert-manager for certificate management
+- Document limitations in submission
+- Take screenshots of current deployment
+- Consider EC2-based alternative for full quest completion
 
-### Q. What if I find a bug or part of my solution isn't detected?
-Awesome! Tell us you found a bug or that the quest can't detect a task you've solved when you submit your quest and we'll talk more!
+The deployment demonstrates modern cloud best practices with containerization, Kubernetes orchestration, infrastructure automation, and load balancing - even though the specific app's AWS detection isn't compatible with container environments.
 
-### Q. What if I fail?
-There is no fail. Complete whatever you can and then submit your work. Doing _everything_ in the quest is not a guarantee that you will "pass" the quest, just like not doing something is not a guarantee you will "fail" the quest.
+### Docker Desktop was installed on a Windows 10 laptop and a deployment was done to AWS
 
-### Q. Can I share this quest with others?
-No. After interviewing, please change any solutions shared publicly to be private.
+### I used Ask Gordan for the first time to assist me with this quest.
 
-### Q. Do I have to spend money out of my own pocket to complete the quest?
-No. There are many possible solutions to this quest that would be zero cost to you when using [AWS](https://aws.amazon.com/free), [GCP](https://cloud.google.com/free), or [Azure](https://azure.microsoft.com/en-us/pricing/free-services).
+## Prompt Summary
 
-### Q. Can I use AI to assist me?
-You may use AI as a reference tool but there will be a strong expectation to exhibit the same expertise and understanding from your submission in your interview. In addition we encourage you to be open about any usage! Please document what you used, what your prompts were, how it helped, what it got wrong, etc.
+### Initial Setup & Problems
+
+1. Asked why build was failing (package-lock.json missing)
+2. Discussed Node version 10 installation options
+3. Chose Docker/EKS deployment over local Node installation
+4. Created Terraform configuration for EKS deployment
+
+### Terraform & Infrastructure
+
+5. Updated Kubernetes version (1.30 → 1.31 → 1.32 → 1.33 → 1.35)
+6. Fixed invalid Terraform arguments (vpc_config, security_groups)
+7. Fixed duplicate outputs in Terraform files
+8. Changed node count from 1 to 2 for HA
+9. Updated instance type from t3.micro to t3.small
+10. Changed deployment replicas from 1 to 2 with pod anti-affinity
+11. Removed liveness and readiness probes (causing crashes)
+
+### Kubernetes & Deployment Issues
+
+12. Fixed Kubernetes provider authentication errors
+13. Handled state file corruption multiple times
+14. Removed and re-imported resources into state
+15. Deleted and recreated deployments to fix conflicts
+16. Updated kubeconfig after cluster upgrades
+17. Fixed pod scheduling issues (too many pods on node)
+
+### AWS Detection & Environment Variables
+
+18. Attempted to detect AWS cloud provider in app
+19. Checked metadata service accessibility (169.254.169.254)
+20. Added AWS environment variables (AWS_REGION, AWS_ACCOUNT_ID, etc.)
+21. Tried IRSA (IAM Roles for Service Accounts) setup
+22. Added IAM policies to node role (AmazonEC2ReadOnlyAccess)
+23. Attempted to pass AWS credentials as secrets and environment variables
+24. Finally injected SECRET_WORD=unknown as environment variable
+
+### Docker & Image Management
+
+25. Built Docker image with Node 10
+26. Pushed image to AWS ECR
+27. Authenticated Docker with ECR
+28. Managed image pull errors and retries
+
+### LoadBalancer & Networking
+
+29. Created AWS Network Load Balancer
+30. Configured security groups for metadata service access
+31. Tested access via port-forward and LoadBalancer endpoint
+
+### Documentation & Quest Understanding
+
+32. Reviewed quest requirements and success criteria
+33. Identified AWS detection limitation in containerized environment
+34. Discussed alternatives (EC2 vs EKS deployment)
+
+### Key Learnings
+
+- Terraform state management complexities
+- Kubernetes provider authentication in Terraform
+- EKS networking and IAM role configuration
+- Container metadata service limitations
+- High availability patterns (replicas, anti-affinity, multi-zone)
+- AWS cloud detection requirements
+
+An answer to the prompt: "Given more time, I would improve..."
+
+- Since I do not have the code, behind the binaries I could only guess how the /aws check was being done. Both the index and the /aws check show that it could not detect AWS GCP or Azure. I spent some time on this working through various options about allowing the container to access the aws metadata service, and also adding AWS specific environment variables, but in the end, it did not work. Gordon suggested that the code might only work in an EC2, but I did not think it worth the time to try this given the purpose seemed to be oriented towards proving knowledge of Docker/Kubernetes/terraform.
+- The terraform could be improved by the creation of modules. Using this technique you could limit the size of the clusters and also specify versions which could be used to avoid the sneaky AWS support charges on the 1.31 cluster which I got hit with for the first day LOL
+- I would also deploy this to AKS and GKE.
+- I didn't love how long it took to create the cluster and nodes in terraform. It seemed brittle and Terraform timed out when deploying after 10 mins. I prefer to use it for shorter deployments. I might look towards using Helm to deploy.
