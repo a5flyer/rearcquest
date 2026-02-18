@@ -150,7 +150,7 @@ Docker check - http(s)://<ip_or_host>[:port]/docker
 -  The Docker check is not working locally on http://localhost:3000 which is running from Docker Desktop, or when deployed to AWS.  The message returned is: "You dont seem to be running in a Docker container. This might be OK as many cloud container orchestration platforms do not use Docker"  It would seem that this code may need to be updated or studied to determine why it isn't detecting in either scenario.
 Secret Word check - http(s)://<ip_or_host>[:port]/secret_word
 -  The secret word check works with the word "unknown" however, the index page does not display the actual secret word so I cannot update the env variable with the correct word.
--  
+
 Load Balancer check - http(s)://<ip_or_host>[:port]/loadbalanced
 - The load balanced check does succeed and displays:
 "Congratulations! Looks like you successfully configured an AWS loadbalancer"
