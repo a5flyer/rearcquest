@@ -143,13 +143,16 @@ What if I find a bug or part of my solution isn't detected?
 Public cloud & index page (contains the secret word) - http(s)://<ip_or_host>[:port]/
 -  The index page isn't being detected properly as running from AWS.  You can see this when you browse to the load balancer here:
 https://afa5e961225d74b2c9c19b41607eea75-841740817.us-east-1.elb.amazonaws.com/
-The message returned is: You don't seem to be running in AWS or GCP or Azure.  
+The message returned is: You don't seem to be running in AWS or GCP or Azure.
+
 Docker check - http(s)://<ip_or_host>[:port]/docker
 -  The Docker check is not working locally on http://localhost:3000 which is running from Docker Desktop, or when deployed to AWS.  The message returned is: "You dont seem to be running in a Docker container. This might be OK as many cloud container orchestration platforms do not use Docker"  It would seem that this code may need to be updated or studied to determine why it isn't detecting in either scenario.
 Secret Word check - http(s)://<ip_or_host>[:port]/secret_word
 -  The secret word check works with the word "unknown" however, the index page does not display the actual secret word so I cannot update the env variable with the correct word.
+-  
 Load Balancer check - http(s)://<ip_or_host>[:port]/loadbalanced
 - The load balanced check does succeed and displays:
 "Congratulations! Looks like you successfully configured an AWS loadbalancer"
+
 TLS check - http(s)://<ip_or_host>[:port]/tls
 -  The TLS check does display "Congratulations! Looks like you successfully configured TLS (https)"
