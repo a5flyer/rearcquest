@@ -140,6 +140,7 @@ An answer to the prompt: "Given more time, I would improve..."
 - I didn't love how long it took to create the cluster and nodes in terraform. It seemed brittle and Terraform timed out when deploying after 10 mins. I prefer to use it for shorter deployments. I might look towards using Helm to deploy.
 
 What if I find a bug or part of my solution isn't detected?
+
 Public cloud & index page (contains the secret word) - http(s)://<ip_or_host>[:port]/
 -  The index page isn't being detected properly as running from AWS.  You can see this when you browse to the load balancer here:
 https://afa5e961225d74b2c9c19b41607eea75-841740817.us-east-1.elb.amazonaws.com/
