@@ -138,3 +138,18 @@ An answer to the prompt: "Given more time, I would improve..."
 - The terraform could be improved by the creation of modules. Using this technique you could limit the size of the clusters and also specify versions which could be used to avoid the sneaky AWS support charges on the 1.31 cluster which I got hit with for the first day LOL
 - I would also deploy this to AKS and GKE.
 - I didn't love how long it took to create the cluster and nodes in terraform. It seemed brittle and Terraform timed out when deploying after 10 mins. I prefer to use it for shorter deployments. I might look towards using Helm to deploy.
+
+Q. What if I find a bug or part of my solution isn't detected?
+Public cloud & index page (contains the secret word) - http(s)://<ip_or_host>[:port]/
+A.  The index page isn't being detected properly as running from AWS.  You can see this when you browse to the load balancer here:
+https://afa5e961225d74b2c9c19b41607eea75-841740817.us-east-1.elb.amazonaws.com/
+The message returned is: You don't seem to be running in AWS or GCP or Azure.  
+Docker check - http(s)://<ip_or_host>[:port]/docker
+A.  The Docker check is not working locally on http://localhost:3000 which is running from Docker Desktop, or when deployed to AWS.  The message returned is: "You dont seem to be running in a Docker container. This might be OK as many cloud container orchestration platforms do not use Docker"  It would seem that this code may need to be updated or studied to determine why it isn't detecting in either scenario.
+Secret Word check - http(s)://<ip_or_host>[:port]/secret_word
+A.  The secret word check works with the word "unknown" however, the index page does not display the actual secret word so I cannot update the env variable with the correct word.
+Load Balancer check - http(s)://<ip_or_host>[:port]/loadbalanced
+A. The load balanced check does succeed and displays:
+"Congratulations! Looks like you successfully configured an AWS loadbalancer"
+TLS check - http(s)://<ip_or_host>[:port]/tls
+A.  The TLS check does display "Congratulations! Looks like you successfully configured TLS (https)"
