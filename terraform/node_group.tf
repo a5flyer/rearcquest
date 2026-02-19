@@ -66,6 +66,24 @@ resource "aws_security_group" "eks_nodes" {
   }
 }
 
+resource "aws_launch_template" "eks_nodes" {
+  name_prefix = "reactf-eks-"
+  description = "Launch template for reactf EKS nodes with IMDS hop limit 2"
+
+  metadata_options {
+    http_endpoint               = "enabled"
+    http_tokens                 = "required"
+    http_put_response_hop_limit = 2
+  }
+
+  tag_specifications {
+    resource_type = "instance"
+    tags = {
+      Name = "reactf-eks-node"
+    }
+  }
+}
+
 resource "aws_eks_node_group" "reactf" {
   cluster_name    = aws_eks_cluster.reactf.name
   node_group_name = "reactf-node-group"
@@ -81,6 +99,11 @@ resource "aws_eks_node_group" "reactf" {
 
   instance_types = [var.instance_types[0]]
 
+  launch_template {
+    id      = aws_launch_template.eks_nodes.id
+    version = "$Latest"
+  }
+
   tags = {
     Name = "reactf-node-group"
   }
@@ -89,5 +112,6 @@ resource "aws_eks_node_group" "reactf" {
     aws_iam_role_policy_attachment.eks_worker_node_policy,
     aws_iam_role_policy_attachment.eks_cni_policy,
     aws_iam_role_policy_attachment.eks_container_registry_policy,
+    aws_launch_template.eks_nodes,
   ]
 }
