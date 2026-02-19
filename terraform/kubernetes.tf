@@ -86,7 +86,7 @@ resource "kubernetes_deployment" "reactf" {
 
           env {
             name  = "SECRET_WORD"
-            value = "quest001001222"
+            value = "TwelveFactor"
           }
 
           env_from {
